@@ -49,8 +49,8 @@ jobs:
         upload: False
         output: sarif-results
 
-    - name: adjust-cvss
-      uses: khulnasoft-lab/adjust-cvss@main
+    - name: cvss-scoring
+      uses: khulnasoft-lab/khulnasoft-lab@main
       with:
         path: ${{ env.CVSS-SCORING }}
         #patterns: |
@@ -67,7 +67,6 @@ jobs:
     - name: Upload SARIF
       uses: github/codeql-action/upload-sarif@v2
       with:
-        path: ${{ env.CVSS-SCORING }}
         sarif_file: sarif-results/${{ matrix.language }}.sarif
 
     - name: Upload loc as a Build Artifact
