@@ -15,6 +15,7 @@ runs:
   steps:
     - name: adjust
       run: |
+      working-directory: ./cvss-scoring
         unset LD_PRELOAD
         python3 "${{ github.action_path }}/cvss_scoring.py" --input "${{ inputs.input }}" --output "${{ inputs.output }}" --split-lines -- "${{ inputs.patterns }}"
       shell: bash
