@@ -1,0 +1,61 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'java' ]
+    
+    env:
+      CVSS-SCORING : "cvss-scoring"
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        path: ${{ env.CVSS-SCORING }}
+        languages: ${{ matrix.language }}
+        queries: security-and-quality
+
+    - run: |
+        javatest/build
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        path: ${{ env.CVSS-SCORING }}
+        output: sarif-results
+        upload: False
+
+    - name: cvss-scoring
+      uses: khulnasoft-lab/khulnasoft-lab@main
+      with:
+        path: ${{ env.CVSS-SCORING }}
+        patterns: |
+          **:1.2
+          java/xss:9.9
+        input: sarif-results/${{ matrix.language }}.sarif
+        output: sarif-results/${{ matrix.language }}.sarif
+
+    - name: Upload SARIF
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        path: ${{ env.CVSS-SCORING }}
+        sarif_file: sarif-results/${{ matrix.language }}.sarif
