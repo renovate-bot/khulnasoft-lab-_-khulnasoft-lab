@@ -1,5 +1,10 @@
 name: "Action Test"
 on:
+  push:
+    branches: [ action/cvss-scoring ]
+  pull_request:
+    branches: [ action/cvss-scoring ]
+    
   workflow_dispatch:
     inputs:
       pattern1:
@@ -45,7 +50,7 @@ jobs:
         output: sarif-results
 
     - name: cvss-scoring
-      uses: khulnasoft-lab/khulnasoft-lab@action/cvss-scoring
+      uses: khulnasoft-lab/khulnasoft-lab@main
       with:
         #patterns: |
         #  -**/*.java
