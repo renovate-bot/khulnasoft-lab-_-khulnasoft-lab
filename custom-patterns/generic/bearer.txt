@@ -1,5 +1,0 @@
-Host: some.example.com
-Authorization: Bearer this_is_just_a_test
-
-
-header = "Authorization: Bearer this_is_also_a_test"

@@ -24,9 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         language: [ 'java' ]
-    
-    env:
-      CVSS-SCORING : "cvss-scoring"
 
     steps:
     - name: Checkout repository
@@ -35,7 +32,6 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        path: ${{ env.CVSS-SCORING }}
         languages: ${{ matrix.language }}
         queries: security-and-quality
 
@@ -45,14 +41,12 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
-        path: ${{ env.CVSS-SCORING }}
         upload: False
         output: sarif-results
 
     - name: cvss-scoring
-      uses: khulnasoft-lab/khulnasoft-lab@main
+      uses: khulnasoft-lab/khulnasoft-lab@action/cvss-scoring
       with:
-        path: ${{ env.CVSS-SCORING }}
         #patterns: |
         #  -**/*.java
         #  +**/*Exposed*

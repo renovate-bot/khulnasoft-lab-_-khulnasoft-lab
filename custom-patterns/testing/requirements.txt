@@ -1,2 +1,0 @@
-python-pcre==0.7
-hyperscan==0.3.2
