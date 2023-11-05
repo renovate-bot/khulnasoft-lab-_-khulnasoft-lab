@@ -30,12 +30,11 @@ jobs:
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        path: ${{ env.CVSS-SCORING }}
         languages: ${{ matrix.language }}
         queries: security-and-quality
 
     - run: |
-        javatest/build
+        cvss-scoring/javatest/build
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
@@ -47,7 +46,6 @@ jobs:
     - name: cvss-scoring
       uses: khulnasoft-lab/khulnasoft-lab@main
       with:
-        path: ${{ env.CVSS-SCORING }}
         patterns: |
           **:1.2
           java/xss:9.9
@@ -57,5 +55,4 @@ jobs:
     - name: Upload SARIF
       uses: github/codeql-action/upload-sarif@v2
       with:
-        path: ${{ env.CVSS-SCORING }}
         sarif_file: sarif-results/${{ matrix.language }}.sarif
